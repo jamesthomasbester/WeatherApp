@@ -1,100 +1,82 @@
-.map-container{
-    display:flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 100vh;
-    min-height: 100vh;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .map-container input{
-    background-color: rgba(0,0,0, 0.7);
-    color: whitesmoke;
-    text-align: center;
-    text-transform: uppercase;
-    width: 230px;
-    height: 30px;
-    border: none;
-    border-radius: 10px;
-    position: fixed;
-    top: 20%;
-    left: calc(50% - 115px);
-  }
-  
-  .blue{
-    background-color: rgba(0,0,0, 0.4);
-    position: absolute;
-    box-shadow: 2px 2px 2px 2px rgba(255, 255, 255, 0.3);
-    bottom: calc(50% - 135px);
-    left: calc(50% - 125px);
-    border-radius: 50%;
-    width: 250px;
-    height: 250px;
-    border: 7px solid aqua;
-    animation: circle 2.5s infinite alternate;
-  }
-  
-  .red{
-      background-color: rgba(0,0,0, 0.4);
-      position: absolute;
-      box-shadow: 2px 2px 2px 2px rgba(255, 255, 255, 0.3);
-      bottom: calc(50% - 135px);
-      left: calc(50% - 125px);
-      border-radius: 50%;
-      width: 250px;
-      height: 250px;
-      border: 7px solid orangered;
-      animation: fire 2.5s infinite alternate;
-  }
-  
-  @keyframes circle {
-    0%{
-      border-color: aquamarine;
-      transform: scale(1);
-    }
-    100%{
-      border-color: aqua;
-      transform: scale(1.05);
-    }
-  }
-  
-  @keyframes fire {
-    0%{
-      border-color: orangered;
-      transform: scale(1);
-    }
-    100%{
-      border-color: crimson;
-      transform: scale(1.05);
-    }
-  }
-  
-  .info{
-    position: absolute;
-    bottom: 30px;
-    left: calc(50% - 90px);
-    color: azure;
-  }
-  
-  
-  .h2temp{
-    color: whitesmoke;
-    font-size: 5rem;
-    margin-top: calc(50% - 3rem);
-    text-align: center;
-    font-weight: 200;
-  }
-  
-  @media screen and (max-height: 560px) {
-  
-    .blue{
-      top: 200px;
-    }
-    .red{
-      top: 200px;
-    }
-    .Nav{
-      height: 30px;
-    }
-  }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+*{
+  font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+}
+p{
+  font-size: 0.8rem;
+}
+
+#map {
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  width: 100%; 
+}
+
+.inputBox{
+  top: 20px;
+  left: 30px;
+  position: absolute;
+  z-index: 1000;
+}
+
+#inputRequest{
+  text-transform: capitalize;
+  padding: 5px 16px;
+  font-size:1rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.7);
+}
+
+.locationCard{
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  border-radius: 10px;
+  z-index: 1000;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  width: 300px;
+  height: 600px;
+  background-color: #F1F1F1;
+}
+
+.locationTitle{
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.locationImg{
+  width: 100%;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.locationCard h3{
+  font-size: 1.5rem;
+  margin: 5px 0px 0px 5px;
+}
+
+.locationCard p{
+  margin: 2px 7px;
+}
+
+h4{
+  margin: 5px 0 0 5px;
+}
+
+.locationWeather{
+  display: flex;
+  flex-direction: column;
+  margin:0;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+#coords{
+  font-size:.7rem;
+}
+
