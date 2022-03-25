@@ -51,6 +51,7 @@ function degToCardinal(deg){
 
 async function apiRequest(location){
     var img = "";
+    var lat, lon;
     const options = {
         method: 'GET',
         headers: {
@@ -60,43 +61,43 @@ async function apiRequest(location){
             'X-RapidAPI-Key': '32b02794cbmsh72da06d86753b95p1dab23jsnd1ca9c7aceae'
         }
     };
-        await fetch('https://google-search3.p.rapidapi.com/api/v1/images/q=melbourne', options)
+
+    await fetch(`https://google-search3.p.rapidapi.com/api/v1/images/q=${location}`, options)
         .then(response => response.json())
         .then(result => {
-            console.log(result.image_results[0].image.src);
             img = result.image_results[0].image.src;
         })
-        .catch(err => console.error(err))
-        .then(
-           fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
-            .then(response => response.json())
-            .then(result =>{ 
-                mapProperities.location = result.name + ", " + result.sys.country;
-                mapProperities.temp = result.main.temp + "°";
-                mapProperities.wind = result.wind.speed + " Km/h";
-                mapProperities.dirrection = degToCardinal(result.wind.deg);
-                mapProperities.description = result.weather[0].description;
-            }).then(    
-                $('#locationCard').html(`
-                <img class="locationImg" src=""/>
-                <div class="locationTitle">
-                <h3>${mapProperities.location}</h3>
-                <br><p id="coords"> ${mapProperities.lng}, ${mapProperities.lat}</p>
-                </div>
-                <div class="locationWeather">
-                <h4>Weather</h4>
-                <p> ${mapProperities.temp}, ${mapProperities.description}<p>
-                <p> ${mapProperities.wind}  ${mapProperities.dirrection}<p>
-                </div>
-                <div class="locationDetails">
-                <h4>Population</h4> <p>1,000,000<p>
-                <h4>Current Events</h4> <p>Night Market<p>
-                </div>
-                `)
-                ),
-    )
+        .catch(err => console.error(err));
     
-    
+    await fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
+        .then(response => response.json())
+        .then(result =>{ 
+            mapProperities.location = result.name + ", " + result.sys.country;
+            mapProperities.temp = result.main.temp + "°";
+            mapProperities.wind = result.wind.speed + " Km/h";
+            mapProperities.dirrection = degToCardinal(result.wind.deg);
+            mapProperities.description = result.weather[0].description;
+            lat = result.coord.lat;
+            lon = result.coord.lon;
+        })
+        .catch(err => console.log(err));
+    $('#locationCard').html(`
+    <img class="locationImg" src=${img}/>
+    <div class="locationTitle">
+    <h3>${mapProperities.location}</h3>
+    <br><p id="coords"> ${mapProperities.lng}, ${mapProperities.lat}</p>
+    </div>
+    <div class="locationWeather">
+    <h4>Weather</h4>
+    <p> ${mapProperities.temp}, ${mapProperities.description}<p>
+    <p> ${mapProperities.wind}  ${mapProperities.dirrection}<p>
+    </div>
+    </div>
+    `)
+        
+    map.flyTo({center:[lon, lat]});
+       
+                
 }
 
 window.addEventListener("keypress", function(e) {
