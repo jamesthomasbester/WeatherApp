@@ -3,11 +3,12 @@ const api = {
     base: "https://api.openweathermap.org/data/2.5/"
 }
 
+var FavouriteLocals = ['Melbourne', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
+var tst;
 var mapProperities =
 {
-    lng: 144.9631,
-    lat: -37.8182,
-    zoom: 11,
+    lng: 0,
+    lat: 0,
     location: "",
     temp: 0,
     wind: "",
@@ -15,17 +16,74 @@ var mapProperities =
     description: ""
 }
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiamFtZXNiZXN0ZXIiLCJhIjoiY2t1NmhnMTlkNWFtbDJ2bzJvaDV2MHN1MiJ9.Puw8sJNEnDYvULGp0odUhQ';
-const map = new mapboxgl.Map({
-container: 'map', // container ID
-style: 'mapbox://styles/mapbox/streets-v11', // style URL
-center: [144.9631, -37.818], // starting position [lng, lat]
-zoom: 11 // starting zoom
-});
-
-map.on('load', () => {
-    
+FavouriteLocals.forEach(element => {
+    $('.Favourites').append(`
+    <button class="FavBtn" value="${element}">${element}</button>
+`)
 })
+
+
+function addFavourite(location){
+    if(FavouriteLocals.find(element => {
+        return element.toLowerCase() === location.toLowerCase();
+    })){
+        $('.error').text(`${location} already in favourities`);
+        window.setTimeout(() => {
+            $('.error').text(``);
+        }, 3000)
+    }else{
+        FavouriteLocals.splice(0, 0, location);
+        FavouriteLocals.splice((FavouriteLocals.length-1), 1)
+        $('.Favourites').html('');
+        FavouriteLocals.forEach(element => {
+            $('.Favourites').append(`
+            <button>${element}</button>
+        `)
+        })
+    }
+    
+}
+
+function weatherToIcon(weather){
+    let icon;
+    switch(weather){
+        case "broken clouds":
+            icon =`<i class="fa-solid fa-cloud-sun fa-2xl"></i>`;
+            break;
+        case "clear skys":
+            icon = `<i class="fa-solid fa-sun fa-2xl"></i>`;
+            break;
+        case "light rain":
+            icon = `<i class="fa-solid fa-cloud-sun-rain fa-2xl"></i>`;
+            break;
+        case "rain and snow":
+            icon = `<i class="fa-solid fa-cloud-sleet fa-2xl"></i>`;
+            break;
+        case "scattered clouds":
+            icon = `<i class="fa-solid fa-sun-cloud fa-2xl"></i>`;
+            break;
+        case "moderate rain":
+            icon = `<i class="fa-solid fa-cloud-showers-heavy fa-2xl"></i>`;
+            break;
+        case "overcast clouds":
+            icon = `<i class="fa-solid fa-clouds fa-2xl"></i>`;
+            break;
+        case "light snow":
+            icon = `<i class="fa-solid fa-snowflake fa-2xl"></i>`;
+            break;
+        case "snow":
+            icon = `<i class="fa-solid fa-cloud-snow fa-2xl"></i>`;
+            break;
+        case "heavy intensity rain":
+            icon = `<i class="fa-solid fa-cloud-showers-water fa-2xl"></i>`
+            break;
+        default:
+            icon = `<i class="fa-solid fa-cloud-rainbow fa-2xl"></i>`;
+            break;
+    }
+    return icon;
+}
+
 
 function degToCardinal(deg){
     let cardinal;
@@ -50,58 +108,76 @@ function degToCardinal(deg){
 }
 
 async function apiRequest(location){
-    var img = "";
+    $('.forecastCard').html('');
     var lat, lon;
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-User-Agent': 'desktop',
-            'X-Proxy-Location': 'EU',
-            'X-RapidAPI-Host': 'google-search3.p.rapidapi.com',
-            'X-RapidAPI-Key': '32b02794cbmsh72da06d86753b95p1dab23jsnd1ca9c7aceae'
-        }
-    };
-
-    await fetch(`https://google-search3.p.rapidapi.com/api/v1/images/q=${location}`, options)
-        .then(response => response.json())
-        .then(result => {
-            img = result.image_results[0].image.src;
-        })
-        .catch(err => console.error(err));
-    
     await fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
         .then(response => response.json())
         .then(result =>{ 
+            console.log(result)
             mapProperities.location = result.name + ", " + result.sys.country;
             mapProperities.temp = result.main.temp + "°";
             mapProperities.wind = result.wind.speed + " Km/h";
             mapProperities.dirrection = degToCardinal(result.wind.deg);
             mapProperities.description = result.weather[0].description;
-            lat = result.coord.lat;
-            lon = result.coord.lon;
+            mapProperities.lat = result.coord.lat;
+            mapProperities.lng = result.coord.lon;
         })
         .catch(err => console.log(err));
-    $('#locationCard').html(`
-    <img class="locationImg" src=${img}/>
-    <div class="locationTitle">
-    <h3>${mapProperities.location}</h3>
-    <br><p id="coords"> ${mapProperities.lng}, ${mapProperities.lat}</p>
-    </div>
-    <div class="locationWeather">
-    <h4>Weather</h4>
-    <p> ${mapProperities.temp}, ${mapProperities.description}<p>
-    <p> ${mapProperities.wind}  ${mapProperities.dirrection}<p>
-    </div>
-    </div>
-    `)
+    await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${mapProperities.lat}&lon=${mapProperities.lng}&units=metric&appid=${api.key}`)
+        .then(response => response.json())
+        .then(result =>{
+        tst = result;
+        console.log(result);
+        }).catch(err => console.log(err));
+
+    $('.locationCard').html(
+        `
+            <h2>${mapProperities.location}</h2>
+            <p>Temperature: ${mapProperities.temp}</p>
+            <p>Wind: ${mapProperities.wind} ${mapProperities.dirrection}</p>
+            <p>${mapProperities.description}</p>
+        `
+    );
+
+    var count = 0;
+    tst.daily.forEach(element => {
+        if(count < 5){
+        console.log(element)
         
-    map.flyTo({center:[lon, lat]});
-       
-                
+        $('.forecastCard').append(
+            `
+                <div class="forecastDay">
+                    <h3>${moment.unix(element.dt).format("dddd DD  MMMM")}</h3>
+                    <p class="weatherIcon">${weatherToIcon(element.weather[0].description)}</p>
+                    <p>Minimum Temp: ${element.temp.min}°</p>
+                    <p>Maximum Temp: ${element.temp.max}°</p>
+                    <p>Wind: ${element.wind_speed}km/h ${degToCardinal(element.wind_deg)}</p>
+                    <p>humidity ${element.humidity}%</p>
+                </div>
+            `
+            )
+        }
+        console.log(weatherToIcon(element.weather[0].description));
+        count++;
+    })
 }
+
+$('.addbtn').click(function(e){
+    addFavourite($('#inputRequest').val())
+})
+
+$('.searchbtn').click(function(e) {
+     e.preventDefault()
+     apiRequest($('#inputRequest').val())
+})
+
+$('.FavBtn').click(function(e){
+    apiRequest(e.target.value);
+})
 
 window.addEventListener("keypress", function(e) {
     if (e.key == 'Enter'){
+        e.preventDefault();
         apiRequest($('#inputRequest').val());
     }
 })

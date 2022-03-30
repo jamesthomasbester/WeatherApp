@@ -2,22 +2,47 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Display a map on a webpage</title>
+<title>weather dashboard</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="index.css">
+<script src="https://kit.fontawesome.com/6174a13322.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<div id="map">
-	<div class="inputBox">
-		<input id="inputRequest" autocapitalize type="text" placeholder="Choose a City"/>
-	</div>
-	<div id="locationCard" class="locationCard">
+	<header>
+		<h1>Weather DashBoard</h1>
+	</header>
+	<main>
+		<div class="leftCard">
+			<div class="inputBox">
+				<h2>Search For a City</h2>
+				<form>
+					<input id="inputRequest"type="text" placeholder="Choose a City"/>
+					<button class="searchbtn" type="submit"><i class="fa fa-search"></i></button>
+				</form>
+				<button class="addbtn">Add to Favourites</button>
+				<p class="error"></p>
+			</div>
+			<div class="Favourites">
+				<h2>Favourite Locations</h2>
+			</div>
+		</div>
+		<div class="rightCard">
+			<div class="locationCard">
 
-		
-	</div>
+			</div>
+			<div class="bottom">
+				<h2>8-day Forecast</h2>
+				<div class="forecastCard">
+					
+
+				</div>
+			</div>
+		</div>
+	</main>
 </div>
 </body>
 <script src="index.js"></script>
