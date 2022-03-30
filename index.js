@@ -77,6 +77,9 @@ function weatherToIcon(weather){
         case "heavy intensity rain":
             icon = `<i class="fa-solid fa-cloud-showers-water fa-2xl"></i>`
             break;
+        case "few clouds":
+            icon = `<i class="fa-solid fa-cloud fa-2xl"></i>`
+            break;
         default:
             icon = `<i class="fa-solid fa-cloud-rainbow fa-2xl"></i>`;
             break;
@@ -130,12 +133,13 @@ async function apiRequest(location){
         console.log(result);
         }).catch(err => console.log(err));
 
-    $('.locationCard').html(
+    $('.locationLeft').html(
         `
             <h2>${mapProperities.location}</h2>
-            <p>Temperature: ${mapProperities.temp}</p>
+            <p class="weatherIcon">${weatherToIcon(mapProperities.description)}</p>
+            <p class="current">${mapProperities.temp}</p>
             <p>Wind: ${mapProperities.wind} ${mapProperities.dirrection}</p>
-            <p>${mapProperities.description}</p>
+            <p>Humidity: ${tst.current.humidity}%</p>
         `
     );
 

@@ -153,9 +153,22 @@ border-radius: 4px;
 
 
 .locationCard{
+  display: flex;
+  flex-direction: row;
   border: 2px solid var(--theme-primary-light1);
   border-radius: 8px 0px 0px 8px;
-  height: 350px;
+  height: 300px;
+}
+
+.locationLeft{
+  padding: 10px;
+  border-radius: 7px 0px 0px 7px;
+  background: var(--theme-primary-dark2);
+  color: var(--theme-base-light);
+}
+
+.locationRight{
+
 }
 
 .forecastCard{
