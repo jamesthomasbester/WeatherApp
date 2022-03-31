@@ -200,11 +200,12 @@ async function apiRequest(location){
     yValues = [];
 
     historyData.hourly.forEach(element => {
-        xValues.push(moment.unix(element.dt).format("HH a, dddd"));
+        xValues.push(moment.unix(element.dt).format("h a, dddd"));
         yValues.push(element.temp);
     })
 
     if(loop > 0){
+        WeatherChart.data.datasets[0].data = yValues;
         WeatherChart.update()
     }else{
         CreateChart();
