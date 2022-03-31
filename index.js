@@ -12,6 +12,8 @@ var yValues = [];
 var WeatherChart;
 const ctx = document.getElementById('myChart').getContext('2d');
 
+//TODO 
+
 //creating the favourite locations buttons based predefined locations if there are none in localstorage
 FavouriteLocals.forEach(element => {
     $('.Favourites').append(`
