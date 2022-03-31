@@ -7,7 +7,7 @@ a functional demo can be found: https://jamesthomasbester.github.io/WeatherApp/
 
 ![Screenshot 2022-03-31 163852](https://user-images.githubusercontent.com/46641259/160984362-080f8e92-8584-4bd8-a56b-13a7ae45cc63.png)
 
-i've utilized chart.js for the charting of the next 24hr weather and all infomation comes from openweatherapi,
+i've utilized chart.js for the charting of the next 48hr weather and all infomation comes from openweatherapi,
 
 mobile responsiveness added via css (css is not my strong suit i have found)
 
