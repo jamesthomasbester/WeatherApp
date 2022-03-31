@@ -5,6 +5,10 @@ const api = {
 
 var FavouriteLocals = ['Melbourne', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
 var tst;
+var xValues = [];
+var yValues = [];
+var WeatherChart;
+const ctx = document.getElementById('myChart').getContext('2d');
 var mapProperities =
 {
     lng: 0,
@@ -15,6 +19,7 @@ var mapProperities =
     dirrection: "",
     description: ""
 }
+
 
 FavouriteLocals.forEach(element => {
     $('.Favourites').append(`
@@ -34,14 +39,67 @@ function addFavourite(location){
     }else{
         FavouriteLocals.splice(0, 0, location);
         FavouriteLocals.splice((FavouriteLocals.length-1), 1)
-        $('.Favourites').html('');
+        $('.Favourites').html('<h2>Favourite Locations</h2>');
         FavouriteLocals.forEach(element => {
             $('.Favourites').append(`
-            <button>${element}</button>
+            <button class="FavBtn" value="${element}">${element}</button>
         `)
+        })
+        $('.FavBtn').click(function(e){
+            apiRequest(e.target.value);
         })
     }
     
+}
+
+function CreateChart(){
+    WeatherChart = new window.Chart(myChart,{
+        type: "line",
+        data: 
+        {
+            labels: xValues,
+            datasets: 
+            [{
+                borderColor: "#fff",
+                data: yValues,
+                pointRadius: 6
+            }]
+        },
+        options: 
+        {   
+            scales: {
+                
+                yAxes: [{
+                    ticks: 
+                    {
+                        fontColor: "white",
+                        fontSize: 18,
+                        stepSize: 1,
+                    },
+                    scaleLabel: {
+                        fontColor: "white",
+                        display: true,
+                        labelString: "Temperature (C°)"
+                      }
+                }],
+                xAxes: [{
+                    ticks: 
+                    {
+                        fontColor: "white",
+                        fontSize: 14,
+                        stepSize: 1,
+                    }
+                }],
+
+            },
+            title: {
+                display: false,
+            },
+            legend: {
+                display: false
+            }
+        }
+    });
 }
 
 function weatherToIcon(weather){
@@ -110,9 +168,9 @@ function degToCardinal(deg){
     return cardinal;
 }
 
+
 async function apiRequest(location){
     $('.forecastCard').html('');
-    var lat, lon;
     await fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
         .then(response => response.json())
         .then(result =>{ 
@@ -138,16 +196,25 @@ async function apiRequest(location){
             <h2>${mapProperities.location}</h2>
             <p class="weatherIcon">${weatherToIcon(mapProperities.description)}</p>
             <p class="current">${mapProperities.temp}</p>
+            <p>${mapProperities.description}</p>
             <p>Wind: ${mapProperities.wind} ${mapProperities.dirrection}</p>
             <p>Humidity: ${tst.current.humidity}%</p>
         `
     );
 
     var count = 0;
+    xValues = [];
+    yValues = [];
+
+    tst.hourly.forEach(element => {
+        xValues.push(moment.unix(element.dt).format("HH a, dddd"));
+        yValues.push(element.temp);
+    })
+
+    CreateChart();
+    
     tst.daily.forEach(element => {
-        if(count < 5){
-        console.log(element)
-        
+        if(count < 5){    
         $('.forecastCard').append(
             `
                 <div class="forecastDay">
@@ -161,9 +228,9 @@ async function apiRequest(location){
             `
             )
         }
-        console.log(weatherToIcon(element.weather[0].description));
         count++;
     })
+      
 }
 
 $('.addbtn').click(function(e){
@@ -185,3 +252,4 @@ window.addEventListener("keypress", function(e) {
         apiRequest($('#inputRequest').val());
     }
 })
+
