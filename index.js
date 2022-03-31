@@ -176,7 +176,7 @@ async function apiRequest(location){
             console.log(result);
         })
         .catch(err => console.log(err));//TODO make a prompt invalid location
-    await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${currentData.coord.lat}&lon=${currentData.coord.lon}&units=metric&appid=${api.key}`)
+    await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentData.coord.lat}&lon=${currentData.coord.lon}&units=metric&appid=${api.key}`)
         .then(response => response.json())
         .then(result =>{
         historyData = result;
