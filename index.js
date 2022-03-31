@@ -5,6 +5,7 @@ const api = {
 
 var FavouriteLocals = ['Sydney', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
 var currentData;
+var loop = 0;
 var historyData;
 var xValues = [];
 var yValues = [];
@@ -203,7 +204,12 @@ async function apiRequest(location){
         yValues.push(element.temp);
     })
 
-    CreateChart();
+    if(loop > 0){
+        WeatherChart.update()
+    }else{
+        CreateChart();
+    }
+    
     
     historyData.daily.forEach(element => {
     $('.forecastCard').append(
@@ -219,6 +225,7 @@ async function apiRequest(location){
         `
         )
     }) 
+    loop++;
 }
 
 
