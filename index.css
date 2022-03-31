@@ -157,8 +157,7 @@ border-radius: 4px;
   width: 100%;
   display: flex;
   flex-direction: row;
-  border: 2px solid var(--theme-primary-light1);
-  border-radius: 8px 0px 0px 8px;
+  border-radius: 8px;
 }
 
 .locationLeft{
@@ -169,7 +168,13 @@ border-radius: 4px;
   color: var(--theme-base-light);
 }
 
+.locationLeft i{
+  align-self: center;
+  margin: 30px 30px;
+}
+
 .locationRight{
+  border-radius: 0px 7px 7px 0px;
   width: 100%;
   background-color: var(--theme-primary-dark3);
   color: var(--theme-base-light);
@@ -182,7 +187,7 @@ border-radius: 4px;
 }
 
 .forecastDay{
-  padding: 15px;
+  padding: 20px;
   border-radius: 4px;
   color: var(--theme-base-light);
   margin: 10px;
@@ -196,14 +201,7 @@ border-radius: 4px;
   transform: scale(1.1);
 }
 
-.weatherIcon{
-  justify-content: center;
-  text-align: center;
-  width: 70px;
-  height: 70px;
-}
-
-.weatherIcon i{
+.forecastDay i{
     align-self: center;
     margin: 30px 60px;
 }
@@ -211,4 +209,92 @@ border-radius: 4px;
 #myChart{
   color: var(--theme-primary-dark1);
   width: 100%;
+}
+
+@media screen and (max-width: 3000px) {
+  #myChart{
+    max-height: 470px;
+    max-width: 100%;
+  }
+  .forecastDay{
+    margin: 10px 20px;
+  }
+}
+@media screen and (max-width: 2000px){
+
+  .forecastDay:nth-last-child(1){
+    display: none;
+  }
+  .forecastDay{
+    margin: 10px;
+  }
+}
+
+@media screen and (max-width: 1800px){
+  .forecastDay{
+    margin: 10px;
+  }
+  .forecastDay:nth-last-child(1){
+    display: none;
+  }
+  .forecastDay:nth-last-child(2){
+    display: none;
+    
+  }
+}
+
+@media screen and (max-width: 1600px){
+
+  .forecastDay:nth-last-child(1){
+    display: none;
+  }
+  .forecastDay:nth-last-child(2){
+    display: none;
+  }
+  .forecastDay:nth-last-child(3){
+    display: none;
+    
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  main{
+    display: flex;
+    flex-direction: column;
+  }
+  .leftCard{
+    width: 100%;
+  }
+  .inputBox{
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .forecastCard{
+    display: flex;
+    flex-direction: column;
+  }
+  .forecastDay{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .forecastDay i p{
+    width: 100%;
+    align-self: center;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .locationRight{
+    display: none;
+  }
+
+  .locationLeft{
+    border-radius: 7px;
+    width: 100%;
+  }
 }

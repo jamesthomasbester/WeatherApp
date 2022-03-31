@@ -3,7 +3,7 @@ const api = {
     base: "https://api.openweathermap.org/data/2.5/"
 }
 
-var FavouriteLocals = ['Melbourne', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
+var FavouriteLocals = ['Melbourne, Au', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
 var tst;
 var xValues = [];
 var yValues = [];
@@ -194,7 +194,7 @@ async function apiRequest(location){
     $('.locationLeft').html(
         `
             <h2>${mapProperities.location}</h2>
-            <p class="weatherIcon">${weatherToIcon(mapProperities.description)}</p>
+            ${weatherToIcon(mapProperities.description)}
             <p class="current">${mapProperities.temp}</p>
             <p>${mapProperities.description}</p>
             <p>Wind: ${mapProperities.wind} ${mapProperities.dirrection}</p>
@@ -214,21 +214,18 @@ async function apiRequest(location){
     CreateChart();
     
     tst.daily.forEach(element => {
-        if(count < 5){    
-        $('.forecastCard').append(
-            `
-                <div class="forecastDay">
-                    <h3>${moment.unix(element.dt).format("dddd DD  MMMM")}</h3>
-                    <p class="weatherIcon">${weatherToIcon(element.weather[0].description)}</p>
-                    <p>Minimum Temp: ${element.temp.min}°</p>
-                    <p>Maximum Temp: ${element.temp.max}°</p>
-                    <p>Wind: ${element.wind_speed}km/h ${degToCardinal(element.wind_deg)}</p>
-                    <p>humidity ${element.humidity}%</p>
-                </div>
-            `
-            )
-        }
-        count++;
+    $('.forecastCard').append(
+        `
+            <div class="forecastDay">
+                <h3>${moment.unix(element.dt).format("dddd DD  MMMM")}</h3>
+                ${weatherToIcon(element.weather[0].description)}
+                <p>Minimum Temp: ${element.temp.min}°</p>
+                <p>Maximum Temp: ${element.temp.max}°</p>
+                <p>Wind: ${element.wind_speed}km/h ${degToCardinal(element.wind_deg)}</p>
+                <p>humidity ${element.humidity}%</p>
+            </div>
+        `
+        )
     })
       
 }
