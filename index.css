@@ -37,7 +37,16 @@ main{
   color: var(--theme-base-dark);
   background: var(--theme-base-light);
   display: flex;
+  flex-direction: column;
+}
+
+.top{
+  display: flex;
   flex-direction: row;
+}
+
+.bottom{
+  margin: 20px;
 }
 
 .leftCard{
@@ -46,10 +55,8 @@ main{
 }
 
 .rightCard{
-  margin-top: 28px;
   width: 100%;
   padding: 15px;
-  height: 400px;
 }
 
 .inputBox{
@@ -216,30 +223,19 @@ border-radius: 4px;
     max-height: 470px;
     max-width: 100%;
   }
+
+}
+@media screen and (max-width: 2000px){
+
+
   .forecastDay{
     margin: 10px 20px;
   }
 }
-@media screen and (max-width: 2000px){
-
-  .forecastDay:nth-last-child(1){
-    display: none;
-  }
-  .forecastDay{
-    margin: 10px;
-  }
-}
 
 @media screen and (max-width: 1800px){
-  .forecastDay{
-    margin: 10px;
-  }
   .forecastDay:nth-last-child(1){
     display: none;
-  }
-  .forecastDay:nth-last-child(2){
-    display: none;
-    
   }
 }
 
@@ -251,14 +247,19 @@ border-radius: 4px;
   .forecastDay:nth-last-child(2){
     display: none;
   }
-  .forecastDay:nth-last-child(3){
+}
+
+@media screen and (max-width: 1600px){
+  .forecastDay:nth-last-child(1){
     display: none;
-    
+  }
+  .forecastDay:nth-last-child(2){
+    display: none;
   }
 }
 
 @media screen and (max-width: 1100px) {
-  main{
+  .top{
     display: flex;
     flex-direction: column;
   }
@@ -271,11 +272,31 @@ border-radius: 4px;
 }
 
 @media screen and (max-width: 800px) {
+
+  .leftCard{
+    margin: 20px 0px 20px 0px;
+  }
+
+  .Favourites button{
+    padding: 20px;
+  }
+
+  .Favourites button:hover{
+    padding: 18px;
+  }
+
+  .rightCard{    
+    text-align: center;
+  }
+  .bottom{
+    text-align: center;
+  }
   .forecastCard{
     display: flex;
     flex-direction: column;
   }
   .forecastDay{
+    margin: 10px 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;

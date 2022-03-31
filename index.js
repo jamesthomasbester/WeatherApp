@@ -3,24 +3,15 @@ const api = {
     base: "https://api.openweathermap.org/data/2.5/"
 }
 
-var FavouriteLocals = ['Melbourne, Au', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
-var tst;
+var FavouriteLocals = ['Sydney', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
+var currentData;
+var historyData;
 var xValues = [];
 var yValues = [];
 var WeatherChart;
 const ctx = document.getElementById('myChart').getContext('2d');
-var mapProperities =
-{
-    lng: 0,
-    lat: 0,
-    location: "",
-    temp: 0,
-    wind: "",
-    dirrection: "",
-    description: ""
-}
 
-
+//creating the favourite locations buttons based predefined locations if there are none in localstorage
 FavouriteLocals.forEach(element => {
     $('.Favourites').append(`
     <button class="FavBtn" value="${element}">${element}</button>
@@ -28,7 +19,10 @@ FavouriteLocals.forEach(element => {
 })
 
 
+ //   adding the location in the search bar to favourite locations,
+
 function addFavourite(location){
+    //checking if the location is already in favourite locations and displaying an error if it is
     if(FavouriteLocals.find(element => {
         return element.toLowerCase() === location.toLowerCase();
     })){
@@ -36,9 +30,11 @@ function addFavourite(location){
         window.setTimeout(() => {
             $('.error').text(``);
         }, 3000)
+        //altering the favourite locations list by removing the last item and inserting in the new item at the first position
     }else{
         FavouriteLocals.splice(0, 0, location);
         FavouriteLocals.splice((FavouriteLocals.length-1), 1)
+        //clearing the prevous elements and appending the new elements in the list
         $('.Favourites').html('<h2>Favourite Locations</h2>');
         FavouriteLocals.forEach(element => {
             $('.Favourites').append(`
@@ -52,6 +48,7 @@ function addFavourite(location){
     
 }
 
+//creating a chart using chart.js, mapping data from openweather api
 function CreateChart(){
     WeatherChart = new window.Chart(myChart,{
         type: "line",
@@ -102,6 +99,7 @@ function CreateChart(){
     });
 }
 
+//function that converts the weather description into fontawesome icons using switch statement for easier to read/edit
 function weatherToIcon(weather){
     let icon;
     switch(weather){
@@ -145,7 +143,7 @@ function weatherToIcon(weather){
     return icon;
 }
 
-
+//function to convert the degrees that the api returns into cardinal directions
 function degToCardinal(deg){
     let cardinal;
     if(deg <= 22.5 || deg >= 338.5){
@@ -174,46 +172,40 @@ async function apiRequest(location){
     await fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
         .then(response => response.json())
         .then(result =>{ 
-            console.log(result)
-            mapProperities.location = result.name + ", " + result.sys.country;
-            mapProperities.temp = result.main.temp + "°";
-            mapProperities.wind = result.wind.speed + " Km/h";
-            mapProperities.dirrection = degToCardinal(result.wind.deg);
-            mapProperities.description = result.weather[0].description;
-            mapProperities.lat = result.coord.lat;
-            mapProperities.lng = result.coord.lon;
+            currentData = result;
+            console.log(result);
         })
-        .catch(err => console.log(err));
-    await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${mapProperities.lat}&lon=${mapProperities.lng}&units=metric&appid=${api.key}`)
+        .catch(err => console.log(err));//TODO make a prompt invalid location
+    await fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${currentData.coord.lat}&lon=${currentData.coord.lon}&units=metric&appid=${api.key}`)
         .then(response => response.json())
         .then(result =>{
-        tst = result;
-        console.log(result);
+        historyData = result;
+        window.location.href = "#currentWeather"
         }).catch(err => console.log(err));
 
     $('.locationLeft').html(
         `
-            <h2>${mapProperities.location}</h2>
-            ${weatherToIcon(mapProperities.description)}
-            <p class="current">${mapProperities.temp}</p>
-            <p>${mapProperities.description}</p>
-            <p>Wind: ${mapProperities.wind} ${mapProperities.dirrection}</p>
-            <p>Humidity: ${tst.current.humidity}%</p>
+            <h2>${currentData.name}, ${currentData.sys.country}</h2>
+            ${weatherToIcon(currentData.weather[0].description)}
+            <p class="current">${currentData.main.temp}°</p>
+            <p>${currentData.weather[0].description}</p>
+            <p>Wind: ${currentData.wind.speed}Km/h ${degToCardinal(currentData.wind.deg)}</p>
+            <p>Humidity: ${historyData.current.humidity}%</p>
         `
     );
 
-    var count = 0;
+    //reseting the chart data to an empty list
     xValues = [];
     yValues = [];
 
-    tst.hourly.forEach(element => {
+    historyData.hourly.forEach(element => {
         xValues.push(moment.unix(element.dt).format("HH a, dddd"));
         yValues.push(element.temp);
     })
 
     CreateChart();
     
-    tst.daily.forEach(element => {
+    historyData.daily.forEach(element => {
     $('.forecastCard').append(
         `
             <div class="forecastDay">
@@ -226,10 +218,11 @@ async function apiRequest(location){
             </div>
         `
         )
-    })
-      
+    }) 
 }
 
+
+//eventlisteners
 $('.addbtn').click(function(e){
     addFavourite($('#inputRequest').val())
 })

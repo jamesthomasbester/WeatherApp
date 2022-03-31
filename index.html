@@ -17,37 +17,39 @@
 		<h1>Weather DashBoard</h1>
 	</header>
 	<main>
-		<div class="leftCard">
-			<div class="inputBox">
-				<h2>Search For a City</h2>
-				<form>
-					<input id="inputRequest"type="text" placeholder="Choose a City"/>
-					<button class="searchbtn" type="submit"><i class="fa fa-search"></i></button>
-				</form>
-				<button class="addbtn">Add to Favourites</button>
-				<p class="error"></p>
+		<div class="top">
+			<div class="leftCard">
+				<div class="inputBox">
+					<h2>Search For a City</h2>
+					<form>
+						<input id="inputRequest"type="text" placeholder="Choose a City"/>
+						<button class="searchbtn" type="submit"><i class="fa fa-search"></i></button>
+					</form>
+					<button class="addbtn">Add to Favourites</button>
+					<p class="error"></p>
+				</div>
+				<div class="Favourites">
+					<h2>Favourite Locations</h2>
+				</div>
 			</div>
-			<div class="Favourites">
-				<h2>Favourite Locations</h2>
+			<div class="rightCard">
+				<h2>Current Weather</h2>
+				<div class="locationCard">
+					<div class="locationLeft">
+	
+					</div>
+					<div class="locationRight">
+						<canvas id="myChart">
+	
+						</canvas>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="rightCard">
-			<div class="locationCard">
-				<div class="locationLeft">
-
-				</div>
-				<div class="locationRight">
-					<canvas id="myChart">
-
-					</canvas>
-				</div>
-			</div>
-			<div class="bottom">
-				<h2>Forecast</h2>
-				<div class="forecastCard">
+		<div id="currentWeather" class="bottom">
+			<h2>Forecast</h2>
+			<div  class="forecastCard">
 					
-
-				</div>
 			</div>
 		</div>
 	</main>
