@@ -14,13 +14,28 @@ const ctx = document.getElementById('myChart').getContext('2d');
 
 //TODO 
 
-//creating the favourite locations buttons based predefined locations if there are none in localstorage
-FavouriteLocals.forEach(element => {
-    $('.Favourites').append(`
-    <button class="FavBtn" value="${element}">${element}</button>
-`)
-})
+function cacheFavourites(){
+    if(localStorage.getItem('Favourites')){
+        FavouriteLocals = JSON.parse(localStorage.getItem('Favourites'));
+    
+    }else{
+        localStorage.setItem('Favourites', JSON.stringify(FavouriteLocals));
+    }
+}
 
+
+//creating the favourite locations buttons based predefined locations if there are none in localstorage
+function createFavouritesection(){
+    $('.Favourites').html('<h2>Favourite Locations</h2>');
+    FavouriteLocals.forEach(element => {
+        $('.Favourites').append(`
+        <button class="FavBtn" value="${element}">${element}</button>
+    `)
+    })
+    $('.FavBtn').click(function(e){
+        apiRequest(e.target.value);
+    })
+}
 
  //   adding the location in the search bar to favourite locations,
 
@@ -37,16 +52,8 @@ function addFavourite(location){
     }else{
         FavouriteLocals.splice(0, 0, location);
         FavouriteLocals.splice((FavouriteLocals.length-1), 1)
-        //clearing the prevous elements and appending the new elements in the list
-        $('.Favourites').html('<h2>Favourite Locations</h2>');
-        FavouriteLocals.forEach(element => {
-            $('.Favourites').append(`
-            <button class="FavBtn" value="${element}">${element}</button>
-        `)
-        })
-        $('.FavBtn').click(function(e){
-            apiRequest(e.target.value);
-        })
+        localStorage.setItem('Favourites', JSON.stringify(FavouriteLocals));
+        createFavouritesection();
     }
     
 }
@@ -213,7 +220,6 @@ async function apiRequest(location){
         CreateChart();
     }
     
-    
     historyData.daily.forEach(element => {
     $('.forecastCard').append(
         `
@@ -231,6 +237,10 @@ async function apiRequest(location){
     loop++;
 }
 
+//onload function calls
+apiRequest(FavouriteLocals[0]);
+cacheFavourites();
+createFavouritesection();
 
 //eventlisteners
 $('.addbtn').click(function(e){
