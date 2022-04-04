@@ -18,4 +18,5 @@ after user feedback, i now redirect user to the current weather section after a 
 ![Screenshot 2022-03-31 164002](https://user-images.githubusercontent.com/46641259/160984604-ad3b816d-7fe8-4162-9bf4-8dd88cc5bc39.png)
 
 no assets needed, the website should work right after a clone,
-occasionly having an issue with the api key not being accepted.
+
+TODO: CSS needs somework to be more readable and the final design/layout could do with some touch ups.
