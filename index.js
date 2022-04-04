@@ -196,7 +196,7 @@ async function apiRequest(location){
             }
         })
         .catch(err => console.log(err));
-    await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentData.coord.lat}&lon=${currentData.coord.lon}&units=metric&appid=${api.key}`)
+    await fetch(`${api.base}onecall?lat=${currentData.coord.lat}&lon=${currentData.coord.lon}&units=metric&appid=${api.key}`)
         .then(response => response.json())
         .then(result =>{
         historyData = result;
