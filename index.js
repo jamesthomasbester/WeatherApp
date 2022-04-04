@@ -1,8 +1,8 @@
+//setting global varriables 
 const api = {
     key: 'f40fdbed4ce6f49a21c55972b85d4f67',
     base: "https://api.openweathermap.org/data/2.5/"
 }
-
 var FavouriteLocals = ['Sydney', 'New york', 'London', 'Cape Town', 'Tokyo', 'Rio de Janeiro', 'Cairo', 'Bangkok']
 var currentData;
 var loop = 0;
@@ -12,8 +12,10 @@ var yValues = [];
 var WeatherChart;
 const ctx = document.getElementById('myChart').getContext('2d');
 
-//TODO 
-
+/*
+    getting and setting the localstoraged cached data, i initially set the 'Favourites' to the FavouriteLocals array,
+    then let the user add locations to the array.
+*/
 function cacheFavourites(){
     if(localStorage.getItem('Favourites')){
         FavouriteLocals = JSON.parse(localStorage.getItem('Favourites'));
@@ -176,8 +178,9 @@ function degToCardinal(deg){
     return cardinal;
 }
 
-
+//the main function of the script, where the api calls are made and the elements are mapped to the html accordanly
 async function apiRequest(location){
+    //2 api calls the first get current weather data, the second get historical data and uses the coordinates from the first api call
     $('.forecastCard').html('');
     await fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
         .then(response => response.json())
@@ -211,15 +214,21 @@ async function apiRequest(location){
         `
     );
 
-    //reseting the chart data to an empty list
+    //reseting the chart data to an empty list (these arrays are for saving data to the chart)
     xValues = [];
     yValues = [];
 
+    //pushing data into the chart arrays X for date and Y for temperature values
     historyData.hourly.forEach(element => {
         xValues.push(moment.unix(element.dt).format("h a, dddd"));
         yValues.push(element.temp);
     })
 
+    /*
+        checking whether this is the first time the code has been run, 
+        so that the script doesn't create a new chart unnecessarily.
+        if the script has run before i just update the data of the chart. 
+    */
     if(loop > 0){
         WeatherChart.data.datasets[0].data = yValues;
         WeatherChart.update()
@@ -228,8 +237,8 @@ async function apiRequest(location){
     }
     //clearing the forecast section
     $('.forecastCard').html('');
+    //mapping a daily weather summary for each object in historydata
     historyData.daily.forEach(element => {
-
     $('.forecastCard').append(
         `
             <div class="forecastDay">
@@ -251,7 +260,7 @@ apiRequest(FavouriteLocals[0]);
 cacheFavourites();
 createFavouritesection();
 
-//eventlisteners
+//eventlisteners & jquery event handlers
 $('.addbtn').click(function(e){
     addFavourite($('#inputRequest').val())
 })
