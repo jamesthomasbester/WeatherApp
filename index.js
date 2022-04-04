@@ -116,29 +116,29 @@ function weatherToIcon(weather){
         case "broken clouds":
             icon =`<i class="fa-solid fa-cloud-sun fa-2xl"></i>`;
             break;
-        case "clear skys":
+        case "clear sky":
             icon = `<i class="fa-solid fa-sun fa-2xl"></i>`;
             break;
         case "light rain":
             icon = `<i class="fa-solid fa-cloud-sun-rain fa-2xl"></i>`;
             break;
         case "rain and snow":
-            icon = `<i class="fa-solid fa-cloud-sleet fa-2xl"></i>`;
+            icon = `<i class="fa-regular fa-snowflake fa-2xl"></i>`;
             break;
         case "scattered clouds":
-            icon = `<i class="fa-solid fa-sun-cloud fa-2xl"></i>`;
+            icon = `<i class="fa-solid fa-cloud-sun fa-2xl"></i>`;
             break;
         case "moderate rain":
-            icon = `<i class="fa-solid fa-cloud-showers-heavy fa-2xl"></i>`;
+            icon = `<i class="fa-solid fa-cloud-rain fa-2xl"></i>`;
             break;
         case "overcast clouds":
-            icon = `<i class="fa-solid fa-clouds fa-2xl"></i>`;
+            icon = `<i class="fa-solid fa-cloud-sun fa-2xl"></i>`;
             break;
         case "light snow":
             icon = `<i class="fa-solid fa-snowflake fa-2xl"></i>`;
             break;
         case "snow":
-            icon = `<i class="fa-solid fa-cloud-snow fa-2xl"></i>`;
+            icon = `<i class="fa-solid fa-snowflake fa-2xl"></i>`;
             break;
         case "heavy intensity rain":
             icon = `<i class="fa-solid fa-cloud-showers-water fa-2xl"></i>`
@@ -147,7 +147,7 @@ function weatherToIcon(weather){
             icon = `<i class="fa-solid fa-cloud fa-2xl"></i>`
             break;
         default:
-            icon = `<i class="fa-solid fa-cloud-rainbow fa-2xl"></i>`;
+            icon = `<i class="fa-solid fa-cloud-meatball fa-2xl"></i>`;
             break;
     }
     return icon;
@@ -182,10 +182,17 @@ async function apiRequest(location){
     await fetch(`${api.base}weather?q=${location}&units=metric&APPID=${api.key}`)
         .then(response => response.json())
         .then(result =>{ 
-            currentData = result;
-            console.log(result);
+            if(result.cod != 200){
+                //simple check whether api responds with 200 'ok', if no 200 displays an error message
+                $('.error').text(`cannot find location`);
+                window.setTimeout(() => {
+                    $('.error').text(``);
+                }, 3000)
+            }else{
+                currentData = result;
+            }
         })
-        .catch(err => console.log(err));//TODO make a prompt invalid location
+        .catch(err => console.log(err));
     await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentData.coord.lat}&lon=${currentData.coord.lon}&units=metric&appid=${api.key}`)
         .then(response => response.json())
         .then(result =>{
@@ -219,8 +226,10 @@ async function apiRequest(location){
     }else{
         CreateChart();
     }
-    
+    //clearing the forecast section
+    $('.forecastCard').html('');
     historyData.daily.forEach(element => {
+
     $('.forecastCard').append(
         `
             <div class="forecastDay">
